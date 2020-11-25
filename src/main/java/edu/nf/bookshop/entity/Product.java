@@ -1,10 +1,14 @@
 package edu.nf.bookshop.entity;
 
+import lombok.Data;
+
+import java.math.BigDecimal;
+
 /**
- * @Author: 傻逼黎汉清
- * @Date: 2020/11/25 15:58
+ * @author Administrator
  */
+@Data
 public class Product {
     private String name;
-    private String a;
+    private BigDecimal price;
 }

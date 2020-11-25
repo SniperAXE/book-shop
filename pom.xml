@@ -8,53 +8,79 @@
     <artifactId>book-shop</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- 属性配置 -->
+    <dependencies>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.47</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!--<dependency>
+            <groupId>edu.nf</groupId>
+            <artifactId>MVC_homework</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>-->
+
+    </dependencies>
+
+    <!--属性配置-->
     <properties>
-        <!-- 内置属性 -->
         <!-- 设置项目的编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- 设置maven test控制台中文乱码的问题-->
-        <argLine>-Dfile.encoding=UTF-8</argLine>
-        <!-- 设置java的版本为1.8，默认版本是1.5-->
+        <!-- 设置java的版本为1.8-->
         <java.version>1.8</java.version>
         <!-- 源码编译的版本为1.8-->
         <maven.compiler.source>1.8</maven.compiler.source>
         <!-- 目标字节码的版本为1.8-->
         <maven.compiler.target>1.8</maven.compiler.target>
+        <!--解决控制台乱码的问题-->
+        <argLine>-Dfile.encoding=UTF-8</argLine>
         <!-- 指定编译器版本为1.8-->
         <maven.compiler.compilerVersion>1.8</maven.compiler.compilerVersion>
 
-        <!-- 自定义属性，管理依赖的版本号 -->
-        <servlet.version>4.0.1</servlet.version>
-        <gson.version>2.8.6</gson.version>
-        <mysql.version>5.1.47</mysql.version>
-        <junit.version>4.12</junit.version>
     </properties>
 
     <build>
-        <plugins>
-            <!--plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <!-- 指定项目的web目录 -->
-                    <warSourceDirectory>web</warSourceDirectory>
-                    <!-- 指定web.xml路径 -->
-                    <webXml>web\WEB-INF\web.xml</webXml>
-                    <!-- 忽略web.xml文件-->
-                    <!--<failOnMissingWebXml>false</failOnMissingWebXml>-->
-                </configuration>
-            </plugin>
-        </plugins>
+    <plugins>
+        <!-- war插件 -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>2.2</version>
+            <configuration>
+                <!-- 指定项目的web目录 -->
+                <warSourceDirectory>web</warSourceDirectory>
+                <!-- 指定web.xml路径 -->
+                <webXml>web\WEB-INF\web.xml</webXml>
+                <!-- 忽略web.xml文件-->
+                <!-- <failOnMissingWebXml>false</failOnMissingWebXml>-->
+            </configuration>
+        </plugin>
+
+        <!--编译时设置编译插件，指定编译参数，并编译到字节码文件-->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+                <compilerArgs>
+                    <arg>-parameters</arg>
+                </compilerArgs>
+            </configuration>
+        </plugin>
+    </plugins>
     </build>
 </project>
