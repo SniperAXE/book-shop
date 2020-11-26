@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/pagination.css">
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/jquery.pagination.js"></script>
+    <script>
+        $(function(){
+            $.ajax({
+                url : 'list_city',
+                method : 'get',
+                data: {'pageNum' : 1, 'pageSize' : 15},
+                success : function(pageInfo){
+                    //渲染表格
+                    addTable(pageInfo.list);
+                    //初始化分页控件
+                    page(pageInfo);
+                }
+            });
+
+            //绑定查询按钮
+            $(':button').on('click',function () {
+                var cityName = $('#city').val();
+                var province = $('#province').val();
+                $.ajax({
+                    url:'list_city',
+                    method:'get',
+                    data:{
+                        'cityName':cityName,
+                        'province':province,
+                        'pageNum':1,
+                        'pageSize':15
+                    },
+                    success:function (pageInfo) {
+                        //渲染表格
+                        addTable(pageInfo.list);
+                        //初始化分页控件
+                        page(pageInfo);
+                    }
+                });
+            })
+        })
+
+        //渲染表格
+        function addTable(dataList){
+            //清除原有数据
+            $('#tab tr:not(:first)').remove();
+            $.each(dataList, function(index, obj){
+                $('#tab').append(
+                    '<tr>'+
+                    '<td>'+obj.id+'</td>'+
+                    '<td>'+obj.name+'</td>'+
+                    '<td>'+obj.code+'</td>'+
+                    '<td>'+obj.province+'</td>'+
+                    '</tr>'
+                );
+            });
+        }
+        //分页
+        function page(data){
+            $("#page").pagination(data.total, { //第一个参数指定共多少条记录
+                items_per_page:data.pageSize, // 每页显示多少条记录
+                next_text:">", //下一页按钮图标
+                prev_text:"<", //上一页按钮图标
+                num_display_entries:5,//主体页数
+                num_edge_entries: 2, //边缘页数
+                callback: function(index){//定义一个回调函数，用于每次点击页码发起分页查询请求
+                    //index为当前页码，只不过下标是从0开始，因此需要+1操作
+                    var pageNum = ++index;
+                    var cityName = $('#city').val();
+                    var province = $('#province').val();
+                    $.ajax({
+                        url : 'list_city',
+                        method : 'get',
+                        data : {
+                            'cityName':cityName,
+                            'province':province,
+                            'pageNum' : pageNum,
+                            'pageSize' : data.pageSize
+                        },
+                        success : function(pageInfo){
+                            //渲染表格
+                            addTable(pageInfo.list);
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+    <h2>城市列表</h2>
+    <form id="f1" class="form-inline" style="float: right">
+        <div class="form-group">
+            <label for="province">省份</label>
+            <input type="text" class="form-control" id="province" placeholder="请输入省份">
+        </div>
+        <div class="form-group">
+            <label for="city">城市</label>
+            <input type="text" class="form-control" id="city" placeholder="请输入城市">
+        </div>
+        <button type="button" class="btn btn-default">查询</button>
+    </form>
+    <table id="tab" class="table table-bordered table-hover table-condensed">
+        <tr>
+            <th>城市ID</th>
+            <th>城市名</th>
+            <th>编号</th>
+            <th>省份</th>
+        </tr>
+    </table>
+    <!-- 这个div用于初始化分页控件 -->
+    <div id="page"></div>
+</div>
+</body>
+</html>
